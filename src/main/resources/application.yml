@@ -1,6 +1,58 @@
+# 공통 설정
+
+# local
 spring:
+  profiles:
+    active: local
+  output:
+    ansi:
+      enabled: ALWAYS
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:~/test
     username: sa
     enabled: true
+  h2:
+    console: /h2-console
+    enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      format_sql: true
+      ddl-auto: create
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+---
+# dev
+spring:
+  profiles: dev
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://34.80.75.221:3306/booboo?serverTimezone=KST&useSSL=false
+    username: booboo
+    password: Elvmaks!@#123
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      format_sql: true
+      ddl-auto: create
+---
+# release
+spring:
+  profiles: release
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://34.80.75.221:3306/booboo?serverTimezone=KST&useSSL=false
+    username: booboo
+    password: Elvmaks!@#123
