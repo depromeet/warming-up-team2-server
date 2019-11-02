@@ -35,6 +35,7 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.664'
     compile group: 'com.auth0', name: 'java-jwt', version: '3.8.0'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
