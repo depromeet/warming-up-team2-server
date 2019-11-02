@@ -1,5 +1,7 @@
-package com.depromeet.booboo.member;
+package com.depromeet.booboo.application;
 
+import com.depromeet.booboo.domain.member.Member;
+import com.depromeet.booboo.domain.member.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service
