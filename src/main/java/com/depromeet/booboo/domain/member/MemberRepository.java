@@ -1,4 +1,4 @@
-package com.depromeet.booboo.member;
+package com.depromeet.booboo.domain.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
