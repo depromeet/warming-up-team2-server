@@ -8,6 +8,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.List;
 
 @Api(value = "지출내역", description = "인증이 필요한 요청입니다.")
 @RestController
@@ -22,6 +26,16 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ExpenditureController {
     private final ExpenditureService expenditureService;
+
+    @ApiOperation("지출 내역을 조회합니다")
+    @GetMapping("/expenditures")
+    public ApiResponse<List<ExpenditureResponse>> getExpenditures(@ApiParam(name = "Authorization", value = "Bearer {accessToken}", required = true)
+                                                                  @RequestHeader(name = "Authorization") String authorization,
+                                                                  @ApiIgnore @RequestAttribute Long memberId,
+                                                                  @PageableDefault(size = 20) Pageable pageable) {
+        Page<ExpenditureResponse> expenditureResponses = expenditureService.getExpenditures(memberId, pageable);
+        return ApiResponse.successFrom(expenditureResponses);
+    }
 
     @ApiOperation("지출 내역을 생성합니다")
     @PostMapping("/expenditures")

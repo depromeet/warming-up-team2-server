@@ -11,6 +11,8 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * - 사용자 ID (memberId Long)
@@ -79,5 +81,17 @@ public class Member {
         spouse.couple = couple;
 
         return coupleRepository.save(couple);
+    }
+
+    public boolean isCouple() {
+        return this.status.isCouple();
+    }
+
+    public List<Member> getCoupleMembers(MemberRepository memberRepository) {
+        Assert.notNull(memberRepository, "'memberRepository' must not be null");
+        if (couple == null || !status.isCouple()) {
+            return Collections.singletonList(this);
+        }
+        return memberRepository.findByCouple(this.couple);
     }
 }
