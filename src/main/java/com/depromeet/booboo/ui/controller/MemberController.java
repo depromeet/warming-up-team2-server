@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api")
 public class MemberController {
     private final MemberService memberService;
 
@@ -19,7 +19,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/{memberId}")
+    @GetMapping("/members/{memberId}")
     public ApiResponse<Member> getMember(@PathVariable Long memberId) {
         Member member = Member.builder()
                 .memberId(memberId)
