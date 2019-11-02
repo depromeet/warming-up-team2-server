@@ -6,7 +6,11 @@ plugins {
 
 group = 'com.depromeet.booboo'
 version = '0.0.1'
-sourceCompatibility = '11'
+
+compileJava   {
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
 
 configurations {
 	compileOnly {
