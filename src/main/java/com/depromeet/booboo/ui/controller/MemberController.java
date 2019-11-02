@@ -20,12 +20,13 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public Member getMember(@PathVariable Long memberId) {
-        return Member.builder()
+    public ApiResponse<Member> getMember(@PathVariable Long memberId) {
+        Member member = Member.builder()
                 .memberId(memberId)
                 .name("mock api")
                 .snsType(Member.SnsType.KAKAO)
                 .createDate(LocalDateTime.now())
                 .build();
+        return ApiResponse.successFrom(member);
     }
 }

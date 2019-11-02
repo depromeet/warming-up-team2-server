@@ -1,9 +1,11 @@
 package com.depromeet.booboo.ui.dto.common;
 
+import lombok.Data;
 import org.springframework.util.Assert;
 
 import java.util.List;
 
+@Data
 public class ApiResponse<T> {
     private static final String EMPTY_MESSAGE = "";
     private static final int TOTAL_COUNT_UNUSED_VALUE = -1;
