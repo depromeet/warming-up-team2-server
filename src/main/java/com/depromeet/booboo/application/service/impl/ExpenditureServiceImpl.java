@@ -12,12 +12,16 @@ import com.depromeet.booboo.domain.member.MemberRepository;
 import com.depromeet.booboo.ui.dto.ExpenditureRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +30,25 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     private final ExpenditureRepository expenditureRepository;
     private final ExpenditureAssembler expenditureAssembler;
     private final StorageAdapter storageAdapter;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ExpenditureResponse> getExpenditures(Long memberId, Pageable pageable) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(pageable, "'pageable' must not be null");
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
+
+        List<Member> members = member.getCoupleMembers(memberRepository);
+        Page<Expenditure> expenditurePage = expenditureRepository.findByMemberIn(members, pageable);
+
+        return new PageImpl<>(
+                expenditurePage.map(expenditureAssembler::toExpenditureResponse).toList(),
+                pageable,
+                expenditurePage.getTotalElements()
+        );
+    }
 
     @Override
     @Transactional

@@ -16,4 +16,8 @@ public enum MemberStatus {
         }
         return COUPLE;
     }
+
+    public boolean isCouple() {
+        return this == COUPLE;
+    }
 }
