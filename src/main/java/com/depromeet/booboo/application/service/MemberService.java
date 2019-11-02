@@ -1,4 +1,4 @@
-package com.depromeet.booboo.application;
+package com.depromeet.booboo.application.service;
 
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.domain.member.MemberRepository;
