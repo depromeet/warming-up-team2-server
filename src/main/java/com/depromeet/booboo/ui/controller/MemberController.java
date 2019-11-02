@@ -1,6 +1,6 @@
 package com.depromeet.booboo.ui.controller;
 
-import com.depromeet.booboo.application.MemberService;
+import com.depromeet.booboo.application.service.MemberService;
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.ui.dto.common.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,7 @@ public class MemberController {
                 .memberId(memberId)
                 .name("mock api")
                 .snsType(Member.SnsType.KAKAO)
-                .createDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
         return ApiResponse.successFrom(member);
     }
