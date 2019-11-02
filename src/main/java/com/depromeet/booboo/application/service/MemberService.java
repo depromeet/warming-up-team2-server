@@ -1,19 +1,7 @@
 package com.depromeet.booboo.application.service;
 
-import com.depromeet.booboo.domain.member.Member;
-import com.depromeet.booboo.domain.member.MemberRepository;
-import org.springframework.stereotype.Service;
+import com.depromeet.booboo.ui.dto.MemberResponse;
 
-@Service
-public class MemberService {
-    private final MemberRepository repository;
-
-    public MemberService(MemberRepository repository) {
-        this.repository = repository;
-    }
-
-    public Long createMember(Member member) {
-        repository.save(member);
-        return member.getMemberId();
-    }
+public interface MemberService {
+    MemberResponse getMember(Long memberId);
 }

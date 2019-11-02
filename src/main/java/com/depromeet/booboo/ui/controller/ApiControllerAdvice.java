@@ -1,6 +1,7 @@
 package com.depromeet.booboo.ui.controller;
 
 import com.depromeet.booboo.application.adapter.kakao.KakaoApiFailedException;
+import com.depromeet.booboo.application.adapter.storage.StorageException;
 import com.depromeet.booboo.ui.dto.common.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiControllerAdvice {
 
-    @ExceptionHandler(KakaoApiFailedException.class)
+    @ExceptionHandler({
+            KakaoApiFailedException.class,
+            StorageException.class
+    })
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    public ApiResponse<Object> handleRuntimeException(RuntimeException ex) {
+    public ApiResponse<Object> handleServiceUnavailableException(RuntimeException ex) {
         log.error("External service is unavailable", ex);
         return ApiResponse.failureFrom(ex.getMessage());
     }
@@ -24,7 +28,7 @@ public class ApiControllerAdvice {
             Exception.class
     })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiResponse<Object> handleException(Exception ex) {
+    public ApiResponse<Object> handleInternalServerErrorException(Exception ex) {
         log.error("Internal server error occurred", ex);
         return ApiResponse.failureFrom(ex.getMessage());
     }
