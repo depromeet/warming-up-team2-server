@@ -1,9 +1,10 @@
-package com.depromeet.booboo.application.service;
+package com.depromeet.booboo.application.service.impl;
 
 import com.depromeet.booboo.application.adapter.kakao.KakaoAdapter;
 import com.depromeet.booboo.application.adapter.kakao.KakaoUserResponse;
 import com.depromeet.booboo.application.exception.ConnectionCodeException;
 import com.depromeet.booboo.application.security.JwtFactory;
+import com.depromeet.booboo.application.service.LoginService;
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.domain.member.MemberRepository;
 import com.depromeet.booboo.domain.member.ProviderType;

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CoupleResponse {
-    private Long coupleId;
+    private Long id;
     private MemberResponse me;
     private MemberResponse spouse;
 }

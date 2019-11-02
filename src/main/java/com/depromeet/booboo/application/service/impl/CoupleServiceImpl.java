@@ -1,6 +1,7 @@
-package com.depromeet.booboo.application.service;
+package com.depromeet.booboo.application.service.impl;
 
 import com.depromeet.booboo.application.assembler.CoupleAssembler;
+import com.depromeet.booboo.application.service.CoupleService;
 import com.depromeet.booboo.domain.couple.Couple;
 import com.depromeet.booboo.domain.couple.CoupleConnectionFailedException;
 import com.depromeet.booboo.domain.couple.CoupleRepository;

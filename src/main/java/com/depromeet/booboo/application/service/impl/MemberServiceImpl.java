@@ -1,7 +1,8 @@
-package com.depromeet.booboo.application.service;
+package com.depromeet.booboo.application.service.impl;
 
 import com.depromeet.booboo.application.assembler.MemberAssembler;
 import com.depromeet.booboo.application.exception.ResourceNotFoundException;
+import com.depromeet.booboo.application.service.MemberService;
 import com.depromeet.booboo.domain.member.MemberRepository;
 import com.depromeet.booboo.ui.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;

@@ -16,7 +16,7 @@ public class CoupleAssembler {
             return null;
         }
         CoupleResponse response = new CoupleResponse();
-        response.setCoupleId(couple.getCoupleId());
+        response.setId(couple.getCoupleId());
         response.setMe(memberAssembler.toMemberResponse(me));
         response.setSpouse(memberAssembler.toMemberResponse(spouse));
         return response;
