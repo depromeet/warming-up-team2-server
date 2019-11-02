@@ -2,6 +2,7 @@ package com.depromeet.booboo.ui.controller;
 
 import com.depromeet.booboo.application.adapter.kakao.KakaoApiFailedException;
 import com.depromeet.booboo.application.adapter.storage.StorageException;
+import com.depromeet.booboo.domain.couple.CoupleConnectionFailedException;
 import com.depromeet.booboo.ui.dto.common.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class ApiControllerAdvice {
+
+    @ExceptionHandler(CoupleConnectionFailedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleBadRequestException(RuntimeException ex) {
+        log.info("Bad request exception occurred", ex);
+        return ApiResponse.failureFrom(ex.getMessage());
+    }
 
     @ExceptionHandler({
             KakaoApiFailedException.class,
