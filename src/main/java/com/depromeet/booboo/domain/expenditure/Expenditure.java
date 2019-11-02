@@ -42,6 +42,25 @@ public class Expenditure {
         return expenditure;
     }
 
+    public Expenditure update(ExpenditureUpdateValue expenditureUpdateValue) {
+        Assert.notNull(expenditureUpdateValue, "'expenditureUpdateValue' must not be null");
+
+        Long amountOfMoney = expenditureUpdateValue.getAmountOfMoney();
+        if (amountOfMoney != null) {
+            this.amountOfMoney = amountOfMoney;
+        }
+        String title = expenditureUpdateValue.getTitle();
+        if (title != null) {
+            this.title = title;
+        }
+        String description = expenditureUpdateValue.getDescription();
+        if (description != null) {
+            this.description = description;
+        }
+        this.validate();
+        return this;
+    }
+
     public Expenditure updateImageUrl(String imageUrl) {
         Assert.hasText(imageUrl, "'imageUrl' must not be null, empty or blank");
 

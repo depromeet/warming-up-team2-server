@@ -49,4 +49,17 @@ public class ExpenditureController {
         );
         return ApiResponse.successFrom(expenditureResponse);
     }
+
+    @ApiOperation("지출 내역을 수정합니다")
+    @PutMapping("/expenditures/{expenditureId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<ExpenditureResponse> createExpenditures(@ApiParam(name = "Authorization", value = "Bearer {accessToken}", required = true)
+                                                               @RequestHeader(name = "Authorization") String authorization,
+                                                               @ApiIgnore @RequestAttribute Long memberId,
+                                                               @PathVariable Long expenditureId,
+                                                               @RequestBody ExpenditureRequest expenditureRequest) {
+        ExpenditureResponse expenditureResponse = expenditureService.updateExpenditure(memberId, expenditureId, expenditureRequest);
+        return ApiResponse.successFrom(expenditureResponse);
+    }
+
 }

@@ -6,6 +6,7 @@ import com.depromeet.booboo.application.service.ExpenditureService;
 import com.depromeet.booboo.domain.expenditure.Expenditure;
 import com.depromeet.booboo.domain.expenditure.ExpenditureException;
 import com.depromeet.booboo.domain.expenditure.ExpenditureRepository;
+import com.depromeet.booboo.domain.expenditure.ExpenditureUpdateValue;
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.domain.member.MemberRepository;
 import com.depromeet.booboo.ui.dto.ExpenditureRequest;
@@ -41,6 +42,23 @@ public class ExpenditureServiceImpl implements ExpenditureService {
                 expenditureRequest.getDescription()
         );
         expenditureRepository.save(expenditure);
+        return expenditureAssembler.toExpenditureResponse(expenditure);
+    }
+
+    @Override
+    @Transactional
+    public ExpenditureResponse updateExpenditure(Long memberId, Long expenditureId, ExpenditureRequest expenditureRequest) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(expenditureId, "'expenditureId' must not be null");
+        Assert.notNull(expenditureRequest, "'expenditureRequest' must not be null");
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
+        Expenditure expenditure = expenditureRepository.findByMemberAndExpenditureId(member, expenditureId)
+                .orElseThrow(() -> new ExpenditureException("expenditure not found. memberId:" + memberId + ", expenditureId:" + expenditureId));
+
+        ExpenditureUpdateValue expenditureUpdateValue = expenditureAssembler.toExpenditureUpdateValue(expenditureRequest);
+        expenditure.update(expenditureUpdateValue);
         return expenditureAssembler.toExpenditureResponse(expenditure);
     }
 

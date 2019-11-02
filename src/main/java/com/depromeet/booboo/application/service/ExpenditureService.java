@@ -9,5 +9,7 @@ import java.io.InputStream;
 public interface ExpenditureService {
     ExpenditureResponse createExpenditure(Long memberId, ExpenditureRequest expenditureRequest);
 
+    ExpenditureResponse updateExpenditure(Long memberId, Long expenditureId, ExpenditureRequest expenditureRequest);
+
     ExpenditureResponse updateImage(Long memberId, Long expenditureId, MediaType mediaType, InputStream inputStream);
 }
