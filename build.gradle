@@ -18,6 +18,10 @@ configurations {
 	}
 }
 
+bootJar {
+	launchScript()
+}
+
 repositories {
 	mavenCentral()
 }
