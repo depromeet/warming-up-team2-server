@@ -37,12 +37,15 @@ public class LoginServiceImpl implements LoginService {
         final String providerUserId = kakaoUserResponse.getId().toString();
 
         Member member = memberRepository.findByProviderTypeAndProviderUserId(ProviderType.KAKAO, providerUserId)
-                .orElseGet(() -> Member.fromKakao(
-                        kakaoUserResponse.getUserName(),
-                        kakaoUserResponse.getProfileImage(),
-                        providerUserId,
-                        this.generateConnectionCode()
-                ));
+                .orElseGet(() -> {
+                    Member createdMember = Member.fromKakao(
+                            kakaoUserResponse.getUserName(),
+                            kakaoUserResponse.getProfileImage(),
+                            providerUserId,
+                            this.generateConnectionCode()
+                    );
+                    return memberRepository.save(createdMember);
+                });
 
         String boobooAccessToken = jwtFactory.generateToken(member);
 
