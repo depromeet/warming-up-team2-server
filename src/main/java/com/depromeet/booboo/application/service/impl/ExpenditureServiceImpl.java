@@ -3,6 +3,7 @@ package com.depromeet.booboo.application.service.impl;
 import com.depromeet.booboo.application.adapter.storage.StorageAdapter;
 import com.depromeet.booboo.application.assembler.ExpenditureAssembler;
 import com.depromeet.booboo.application.service.ExpenditureService;
+import com.depromeet.booboo.domain.category.Category;
 import com.depromeet.booboo.domain.category.CategoryRepository;
 import com.depromeet.booboo.domain.expenditure.Expenditure;
 import com.depromeet.booboo.domain.expenditure.ExpenditureException;
@@ -10,6 +11,7 @@ import com.depromeet.booboo.domain.expenditure.ExpenditureRepository;
 import com.depromeet.booboo.domain.expenditure.ExpenditureUpdateValue;
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.domain.member.MemberRepository;
+import com.depromeet.booboo.ui.dto.ExpenditureQueryRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,15 +38,33 @@ public class ExpenditureServiceImpl implements ExpenditureService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ExpenditureResponse> getExpenditures(Long memberId, Pageable pageable) {
+    public Page<ExpenditureResponse> getExpenditures(Long memberId, ExpenditureQueryRequest expenditureQueryRequest, Pageable pageable) {
         Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(expenditureQueryRequest, "'expenditureQueryRequest' must not be null");
         Assert.notNull(pageable, "'pageable' must not be null");
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
 
         List<Member> members = member.getCoupleMembers(memberRepository);
-        Page<Expenditure> expenditurePage = expenditureRepository.findByMemberIn(members, pageable);
+
+
+        String categoryName = expenditureQueryRequest.getCategory();
+        Page<Expenditure> expenditurePage;
+        // TODO: QueryDSL
+        if (categoryName == null) {
+            expenditurePage = expenditureRepository.findByMemberIn(members, pageable);
+        } else {
+            Category category = categoryRepository.findByNameAndMemberIdIn(categoryName, members.stream()
+                    .map(Member::getMemberId)
+                    .collect(Collectors.toList()))
+                    .orElse(null);
+            if (category == null) {
+                expenditurePage = expenditureRepository.findByMemberIn(members, pageable);
+            } else {
+                expenditurePage = expenditureRepository.findByMemberInAndCategoryId(members, category.getCategoryId(), pageable);
+            }
+        }
 
         return new PageImpl<>(
                 expenditurePage.map(expenditureAssembler::toExpenditureResponse).toList(),
