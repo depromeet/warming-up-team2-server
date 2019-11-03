@@ -3,6 +3,7 @@ package com.depromeet.booboo.application.service.impl;
 import com.depromeet.booboo.application.adapter.storage.StorageAdapter;
 import com.depromeet.booboo.application.assembler.ExpenditureAssembler;
 import com.depromeet.booboo.application.service.ExpenditureService;
+import com.depromeet.booboo.domain.category.CategoryRepository;
 import com.depromeet.booboo.domain.expenditure.Expenditure;
 import com.depromeet.booboo.domain.expenditure.ExpenditureException;
 import com.depromeet.booboo.domain.expenditure.ExpenditureRepository;
@@ -22,6 +23,7 @@ import org.springframework.util.Assert;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     private final MemberRepository memberRepository;
     private final ExpenditureRepository expenditureRepository;
     private final ExpenditureAssembler expenditureAssembler;
+    private final CategoryRepository categoryRepository;
     private final StorageAdapter storageAdapter;
 
     @Override
@@ -58,11 +61,22 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
 
+        List<Long> memberIds = member.getCoupleMembers(memberRepository)
+                .stream()
+                .map(Member::getMemberId)
+                .collect(Collectors.toList());
+        Long categoryId = expenditureRequest.getCategoryId();
+
+        if (categoryId != null && !categoryRepository.existsByCategoryIdAndMemberIdIn(categoryId, memberIds)) {
+            throw new ExpenditureException("'category' not found. memberId:" + memberId + ", categoryId:" + categoryId);
+        }
+
         Expenditure expenditure = Expenditure.create(
                 member,
                 expenditureRequest.getAmountOfMoney(),
                 expenditureRequest.getTitle(),
-                expenditureRequest.getDescription()
+                expenditureRequest.getDescription(),
+                categoryId
         );
         expenditureRepository.save(expenditure);
         return expenditureAssembler.toExpenditureResponse(expenditure);

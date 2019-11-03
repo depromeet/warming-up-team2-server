@@ -36,6 +36,7 @@ public class ExpenditureAssembler {
         value.setAmountOfMoney(expenditureRequest.getAmountOfMoney());
         value.setTitle(expenditureRequest.getTitle());
         value.setDescription(expenditureRequest.getDescription());
+        value.setCategoryId(expenditureRequest.getCategoryId());
         return value;
     }
 }

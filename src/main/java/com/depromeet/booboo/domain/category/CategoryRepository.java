@@ -9,5 +9,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByNameAndMemberIdIn(String name, List<Long> memberIds);
 
+    boolean existsByCategoryIdAndMemberIdIn(Long categoryId, List<Long> memberIds);
+
     Page<Category> findByMemberIdIn(List<Long> memberIds, Pageable pageable);
 }
