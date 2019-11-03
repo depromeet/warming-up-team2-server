@@ -1,6 +1,7 @@
 package com.depromeet.booboo.ui.controller;
 
 import com.depromeet.booboo.application.service.ExpenditureService;
+import com.depromeet.booboo.ui.dto.ExpenditureQueryRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureResponse;
 import com.depromeet.booboo.ui.dto.common.ApiResponse;
@@ -32,8 +33,12 @@ public class ExpenditureController {
     public ApiResponse<List<ExpenditureResponse>> getExpenditures(@ApiParam(name = "Authorization", value = "Bearer {accessToken}", required = true)
                                                                   @RequestHeader(name = "Authorization") String authorization,
                                                                   @ApiIgnore @RequestAttribute Long memberId,
+                                                                  @RequestParam(required = false) String category,
                                                                   @PageableDefault(size = 20) Pageable pageable) {
-        Page<ExpenditureResponse> expenditureResponses = expenditureService.getExpenditures(memberId, pageable);
+        ExpenditureQueryRequest expenditureQueryRequest = new ExpenditureQueryRequest();
+        expenditureQueryRequest.setCategory(category);
+
+        Page<ExpenditureResponse> expenditureResponses = expenditureService.getExpenditures(memberId, expenditureQueryRequest, pageable);
         return ApiResponse.successFrom(expenditureResponses);
     }
 

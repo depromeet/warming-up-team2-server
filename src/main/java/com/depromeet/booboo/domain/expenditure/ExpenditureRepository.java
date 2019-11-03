@@ -12,4 +12,6 @@ public interface ExpenditureRepository extends JpaRepository<Expenditure, Long> 
     Optional<Expenditure> findByMemberAndExpenditureId(Member member, Long expenditureId);
 
     Page<Expenditure> findByMemberIn(List<Member> members, Pageable pageable);
+
+    Page<Expenditure> findByMemberInAndCategoryId(List<Member> members, Long categoryId, Pageable pageable);
 }

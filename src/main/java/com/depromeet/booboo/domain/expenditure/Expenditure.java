@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class Expenditure {
     private Long expenditureId;
     @ManyToOne
     private Member member;
+    private Long categoryId;
     private Long amountOfMoney;
     private String title;
     private String description;
@@ -31,12 +33,21 @@ public class Expenditure {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Expenditure create(Member member, Long amountOfMoney, String title, String description) {
+    public static Expenditure create(Member member,
+                                     Long amountOfMoney,
+                                     String title,
+                                     String description,
+                                     Long categoryId) {
         Expenditure expenditure = new Expenditure();
         expenditure.member = member;
         expenditure.amountOfMoney = amountOfMoney;
         expenditure.title = title;
-        expenditure.description = description;
+        if (!StringUtils.isEmpty(description)) {
+            expenditure.description = description;
+        }
+        if (categoryId != null) {
+            expenditure.categoryId = categoryId;
+        }
 
         expenditure.validate();
         return expenditure;
@@ -56,6 +67,10 @@ public class Expenditure {
         String description = expenditureUpdateValue.getDescription();
         if (description != null) {
             this.description = description;
+        }
+        Long categoryId = expenditureUpdateValue.getCategoryId();
+        if (categoryId != null) {
+            this.categoryId = categoryId;
         }
         this.validate();
         return this;
@@ -77,6 +92,5 @@ public class Expenditure {
             throw new IllegalArgumentException("'amountOfMoney' must be greater than or equal to zero. amountOfMoney:" + amountOfMoney);
         }
         Assert.hasText(this.title, "'title' must not be null, empty or blank");
-        Assert.hasText(this.description, "'description' must not be null, empty or blank");
     }
 }
