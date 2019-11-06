@@ -8,4 +8,5 @@ public class MemberResponse {
     private String name;
     private String profileImageUrl;
     private String status;
+    private String connectionCode;
 }

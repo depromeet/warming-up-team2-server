@@ -1,5 +1,6 @@
 package com.depromeet.booboo.ui.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.util.Assert;
@@ -18,6 +19,7 @@ public class ApiResponse<T> {
     private final Long totalCount;
     private final T data;
 
+    @JsonCreator
     private ApiResponse(String message, Long totalCount, T data) {
         this.message = message;
         this.totalCount = totalCount;
