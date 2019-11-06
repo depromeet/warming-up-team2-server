@@ -34,9 +34,33 @@ spring:
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: create
+      ddl-auto: update
+
+server:
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /home/ec2-user/logs/booboo-api
+
+logging:
+  file:
+    max-history: 30
+    max-size: 100MB
+    path: /home/ec2-user/logs/booboo-api
 
 ---
 
 spring:
   profiles: release
+
+server:
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /home/ec2-user/logs/booboo-api
+
+logging:
+  file:
+    max-history: 30
+    max-size: 100MB
+    path: /home/ec2-user/logs/booboo-api
