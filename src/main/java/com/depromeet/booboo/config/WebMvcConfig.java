@@ -20,7 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(this.tokenInterceptor())
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/login")
+                .excludePathPatterns("/api/members/login")
                 .excludePathPatterns("/swagger-ui.html")
                 .excludePathPatterns("/webjars/springfox-swagger-ui/**")
                 .excludePathPatterns("/swagger-resources/**")
