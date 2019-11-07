@@ -8,7 +8,7 @@ import com.depromeet.booboo.domain.category.CategoryRepository;
 import com.depromeet.booboo.domain.expenditure.Expenditure;
 import com.depromeet.booboo.domain.expenditure.ExpenditureException;
 import com.depromeet.booboo.domain.expenditure.ExpenditureRepository;
-import com.depromeet.booboo.domain.expenditure.ExpenditureUpdateValue;
+import com.depromeet.booboo.domain.expenditure.ExpenditureValue;
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.domain.member.MemberRepository;
 import com.depromeet.booboo.ui.dto.ExpenditureQueryRequest;
@@ -90,11 +90,8 @@ public class ExpenditureServiceImpl implements ExpenditureService {
 
         Expenditure expenditure = Expenditure.create(
                 member,
-                expenditureRequest.getAmountOfMoney(),
-                expenditureRequest.getTitle(),
-                expenditureRequest.getDescription(),
-                category.getCategoryId(),
-                expenditureRequest.getPaymentMethod()
+                expenditureAssembler.toExpenditureValue(expenditureRequest),
+                category
         );
         expenditureRepository.save(expenditure);
         return expenditureAssembler.toExpenditureResponse(expenditure);
@@ -116,8 +113,8 @@ public class ExpenditureServiceImpl implements ExpenditureService {
                 .stream()
                 .map(Member::getMemberId)
                 .collect(Collectors.toList());
-        ExpenditureUpdateValue expenditureUpdateValue = expenditureAssembler.toExpenditureUpdateValue(expenditureRequest);
-        expenditure.update(memberId, memberIds, expenditureUpdateValue, categoryRepository);
+        ExpenditureValue expenditureValue = expenditureAssembler.toExpenditureValue(expenditureRequest);
+        expenditure.update(memberId, memberIds, expenditureValue, categoryRepository);
         return expenditureAssembler.toExpenditureResponse(expenditure);
     }
 
