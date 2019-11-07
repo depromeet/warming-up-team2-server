@@ -1,7 +1,8 @@
 package com.depromeet.booboo.ui.dto.common;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.util.Assert;
 
@@ -9,17 +10,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
     private static final String EMPTY_MESSAGE = "";
     private static final String DEFAULT_ERROR_MESSAGE = "서버 에러가 발생했습니다";
     private static final long UNUSED_TOTAL_COUNT = -1L;
     private static final Object UNUSED_DATA = null;
 
-    private final String message;
-    private final Long totalCount;
-    private final T data;
+    private String message;
+    private Long totalCount;
+    private T data;
 
-    @JsonCreator
     private ApiResponse(String message, Long totalCount, T data) {
         this.message = message;
         this.totalCount = totalCount;

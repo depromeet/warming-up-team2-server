@@ -116,10 +116,10 @@ public class LoginTest {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setAccessToken(kakaoAccessToken);
 
-        TestApiResult<LoginResponse> firstLoginResult = loginControllerApi.login(loginRequest);
-        String firstAccessToken = firstLoginResult.getApiResponse().getData().getAccessToken();
+        TestApiResult<LoginResponse> loginResult = loginControllerApi.login(loginRequest);
+        String firstAccessToken = loginResult.getApiResponse().getData().getAccessToken();
 
-        TestApiResult<MemberResponse> firstMeResult = memberControllerApi.getMe(firstAccessToken);
-        return firstMeResult.getApiResponse().getData().getId();
+        TestApiResult<MemberResponse> getMeResult = memberControllerApi.getMe(firstAccessToken);
+        return getMeResult.getApiResponse().getData().getId();
     }
 }
