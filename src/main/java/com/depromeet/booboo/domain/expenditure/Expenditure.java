@@ -47,13 +47,13 @@ public class Expenditure {
         Expenditure expenditure = new Expenditure();
         expenditure.member = member;
         expenditure.amountOfMoney = expenditureValue.getAmountOfMoney();
-        expenditure.title = expenditure.getTitle();
+        expenditure.title = expenditureValue.getTitle();
         String description = expenditureValue.getDescription();
         if (!StringUtils.isEmpty(description)) {
             expenditure.description = description;
         }
         expenditure.paymentMethodType = PaymentMethodType.from(expenditureValue.getPaymentMethod());
-        LocalDate expendedAt = expenditure.getExpendedAt();
+        LocalDate expendedAt = expenditureValue.getExpendedAt();
         if (expendedAt != null) {
             expenditure.expendedAt = expendedAt;
         }

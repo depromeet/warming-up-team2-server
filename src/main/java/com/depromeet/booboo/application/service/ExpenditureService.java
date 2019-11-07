@@ -3,6 +3,7 @@ package com.depromeet.booboo.application.service;
 import com.depromeet.booboo.ui.dto.ExpenditureQueryRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureResponse;
+import com.depromeet.booboo.ui.dto.MonthlyTotalExpenditureResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -17,4 +18,6 @@ public interface ExpenditureService {
     ExpenditureResponse updateExpenditure(Long memberId, Long expenditureId, ExpenditureRequest expenditureRequest);
 
     ExpenditureResponse updateImage(Long memberId, Long expenditureId, MediaType mediaType, InputStream inputStream);
+
+    MonthlyTotalExpenditureResponse getTotalExpendituresMonthly(Long memberId);
 }
