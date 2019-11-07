@@ -7,5 +7,6 @@ public class ExpenditureUpdateValue {
     private Long amountOfMoney;
     private String title;
     private String description;
-    private Long categoryId;
+    private String category;
+    private String paymentMethod;
 }

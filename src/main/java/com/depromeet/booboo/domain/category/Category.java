@@ -44,4 +44,21 @@ public class Category {
         category.name = name;
         return categoryRepository.save(category);
     }
+
+    public static Category getOrCreate(Long memberId,
+                                       List<Long> memberIds,
+                                       String name,
+                                       CategoryRepository categoryRepository) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.hasText(name, "'name' must not be null, empty or blank");
+        Assert.notNull(categoryRepository, "'categoryRepository' must not be null");
+
+        return categoryRepository.findByNameAndMemberIdIn(name, memberIds)
+                .orElseGet(() -> {
+                    Category category = new Category();
+                    category.memberId = memberId;
+                    category.name = name;
+                    return categoryRepository.save(category);
+                });
+    }
 }
