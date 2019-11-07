@@ -85,18 +85,16 @@ public class ExpenditureServiceImpl implements ExpenditureService {
                 .stream()
                 .map(Member::getMemberId)
                 .collect(Collectors.toList());
-        Long categoryId = expenditureRequest.getCategoryId();
-
-        if (categoryId != null && !categoryRepository.existsByCategoryIdAndMemberIdIn(categoryId, memberIds)) {
-            throw new ExpenditureException("'category' not found. memberId:" + memberId + ", categoryId:" + categoryId);
-        }
+        String categoryName = expenditureRequest.getCategory();
+        Category category = Category.getOrCreate(memberId, memberIds, categoryName, categoryRepository);
 
         Expenditure expenditure = Expenditure.create(
                 member,
                 expenditureRequest.getAmountOfMoney(),
                 expenditureRequest.getTitle(),
                 expenditureRequest.getDescription(),
-                categoryId
+                category.getCategoryId(),
+                expenditureRequest.getPaymentMethod()
         );
         expenditureRepository.save(expenditure);
         return expenditureAssembler.toExpenditureResponse(expenditure);
@@ -114,8 +112,12 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         Expenditure expenditure = expenditureRepository.findByMemberAndExpenditureId(member, expenditureId)
                 .orElseThrow(() -> new ExpenditureException("expenditure not found. memberId:" + memberId + ", expenditureId:" + expenditureId));
 
+        List<Long> memberIds = member.getCoupleMembers(memberRepository)
+                .stream()
+                .map(Member::getMemberId)
+                .collect(Collectors.toList());
         ExpenditureUpdateValue expenditureUpdateValue = expenditureAssembler.toExpenditureUpdateValue(expenditureRequest);
-        expenditure.update(expenditureUpdateValue);
+        expenditure.update(memberId, memberIds, expenditureUpdateValue, categoryRepository);
         return expenditureAssembler.toExpenditureResponse(expenditure);
     }
 

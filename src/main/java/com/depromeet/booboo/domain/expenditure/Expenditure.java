@@ -1,5 +1,7 @@
 package com.depromeet.booboo.domain.expenditure;
 
+import com.depromeet.booboo.domain.category.Category;
+import com.depromeet.booboo.domain.category.CategoryRepository;
 import com.depromeet.booboo.domain.member.Member;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +31,8 @@ public class Expenditure {
     private String title;
     private String description;
     private String imageUrl;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethodType paymentMethodType;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
@@ -37,7 +42,8 @@ public class Expenditure {
                                      Long amountOfMoney,
                                      String title,
                                      String description,
-                                     Long categoryId) {
+                                     Long categoryId,
+                                     String paymentMethod) {
         Expenditure expenditure = new Expenditure();
         expenditure.member = member;
         expenditure.amountOfMoney = amountOfMoney;
@@ -48,12 +54,12 @@ public class Expenditure {
         if (categoryId != null) {
             expenditure.categoryId = categoryId;
         }
-
+        expenditure.paymentMethodType = PaymentMethodType.from(paymentMethod);
         expenditure.validate();
         return expenditure;
     }
 
-    public Expenditure update(ExpenditureUpdateValue expenditureUpdateValue) {
+    public Expenditure update(Long memberId, List<Long> memberIds, ExpenditureUpdateValue expenditureUpdateValue, CategoryRepository categoryRepository) {
         Assert.notNull(expenditureUpdateValue, "'expenditureUpdateValue' must not be null");
 
         Long amountOfMoney = expenditureUpdateValue.getAmountOfMoney();
@@ -68,10 +74,11 @@ public class Expenditure {
         if (description != null) {
             this.description = description;
         }
-        Long categoryId = expenditureUpdateValue.getCategoryId();
-        if (categoryId != null) {
-            this.categoryId = categoryId;
+        String categoryName = expenditureUpdateValue.getCategory();
+        if (!StringUtils.isEmpty(categoryName)) {
+            this.categoryId = Category.getOrCreate(memberId, memberIds, categoryName, categoryRepository).getCategoryId();
         }
+        this.paymentMethodType = PaymentMethodType.from(expenditureUpdateValue.getPaymentMethod());
         this.validate();
         return this;
     }
