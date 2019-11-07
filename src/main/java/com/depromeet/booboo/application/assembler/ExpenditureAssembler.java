@@ -1,7 +1,7 @@
 package com.depromeet.booboo.application.assembler;
 
 import com.depromeet.booboo.domain.expenditure.Expenditure;
-import com.depromeet.booboo.domain.expenditure.ExpenditureUpdateValue;
+import com.depromeet.booboo.domain.expenditure.ExpenditureValue;
 import com.depromeet.booboo.ui.dto.ExpenditureRequest;
 import com.depromeet.booboo.ui.dto.ExpenditureResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +25,22 @@ public class ExpenditureAssembler {
         response.setDescription(expenditure.getDescription());
         response.setImageUrl(expenditure.getImageUrl());
         response.setPaymentMethod(expenditure.getPaymentMethodType().name());
+        response.setExpendedAt(expenditure.getExpendedAt());
         response.setCreatedAt(expenditure.getCreatedAt());
         response.setUpdatedAt(expenditure.getUpdatedAt());
         return response;
     }
 
-    public ExpenditureUpdateValue toExpenditureUpdateValue(ExpenditureRequest expenditureRequest) {
+    public ExpenditureValue toExpenditureValue(ExpenditureRequest expenditureRequest) {
         Assert.notNull(expenditureRequest, "'expenditureRequest' must not be null");
 
-        ExpenditureUpdateValue value = new ExpenditureUpdateValue();
+        ExpenditureValue value = new ExpenditureValue();
         value.setAmountOfMoney(expenditureRequest.getAmountOfMoney());
         value.setTitle(expenditureRequest.getTitle());
         value.setDescription(expenditureRequest.getDescription());
         value.setCategory(expenditureRequest.getCategory());
         value.setPaymentMethod(expenditureRequest.getPaymentMethod());
+        value.setExpendedAt(expenditureRequest.getExpendedAt());
         return value;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,52 +34,60 @@ public class Expenditure {
     private String imageUrl;
     @Enumerated(EnumType.STRING)
     private PaymentMethodType paymentMethodType;
+    private LocalDate expendedAt;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Expenditure create(Member member,
-                                     Long amountOfMoney,
-                                     String title,
-                                     String description,
-                                     Long categoryId,
-                                     String paymentMethod) {
+    public static Expenditure create(Member member, ExpenditureValue expenditureValue, Category category) {
+        Assert.notNull(member, "'member' must not be null");
+        Assert.notNull(expenditureValue, "'expenditureValue' must not be null");
+
         Expenditure expenditure = new Expenditure();
         expenditure.member = member;
-        expenditure.amountOfMoney = amountOfMoney;
-        expenditure.title = title;
+        expenditure.amountOfMoney = expenditureValue.getAmountOfMoney();
+        expenditure.title = expenditure.getTitle();
+        String description = expenditureValue.getDescription();
         if (!StringUtils.isEmpty(description)) {
             expenditure.description = description;
         }
-        if (categoryId != null) {
-            expenditure.categoryId = categoryId;
+        expenditure.paymentMethodType = PaymentMethodType.from(expenditureValue.getPaymentMethod());
+        LocalDate expendedAt = expenditure.getExpendedAt();
+        if (expendedAt != null) {
+            expenditure.expendedAt = expendedAt;
         }
-        expenditure.paymentMethodType = PaymentMethodType.from(paymentMethod);
+        if (category != null) {
+            expenditure.categoryId = category.getCategoryId();
+        }
         expenditure.validate();
         return expenditure;
     }
 
-    public Expenditure update(Long memberId, List<Long> memberIds, ExpenditureUpdateValue expenditureUpdateValue, CategoryRepository categoryRepository) {
-        Assert.notNull(expenditureUpdateValue, "'expenditureUpdateValue' must not be null");
+    public Expenditure update(Long memberId, List<Long> memberIds, ExpenditureValue expenditureValue, CategoryRepository categoryRepository) {
+        Assert.notNull(expenditureValue, "'expenditureValue' must not be null");
 
-        Long amountOfMoney = expenditureUpdateValue.getAmountOfMoney();
+        Long amountOfMoney = expenditureValue.getAmountOfMoney();
         if (amountOfMoney != null) {
             this.amountOfMoney = amountOfMoney;
         }
-        String title = expenditureUpdateValue.getTitle();
+        String title = expenditureValue.getTitle();
         if (title != null) {
             this.title = title;
         }
-        String description = expenditureUpdateValue.getDescription();
+        String description = expenditureValue.getDescription();
         if (description != null) {
             this.description = description;
         }
-        String categoryName = expenditureUpdateValue.getCategory();
+        String categoryName = expenditureValue.getCategory();
         if (!StringUtils.isEmpty(categoryName)) {
             this.categoryId = Category.getOrCreate(memberId, memberIds, categoryName, categoryRepository).getCategoryId();
         }
-        this.paymentMethodType = PaymentMethodType.from(expenditureUpdateValue.getPaymentMethod());
+        this.paymentMethodType = PaymentMethodType.from(expenditureValue.getPaymentMethod());
+        LocalDate expendedAt = expenditureValue.getExpendedAt();
+        if (expendedAt != null) {
+            this.expendedAt = expendedAt;
+        }
         this.validate();
         return this;
     }
@@ -99,5 +108,7 @@ public class Expenditure {
             throw new IllegalArgumentException("'amountOfMoney' must be greater than or equal to zero. amountOfMoney:" + amountOfMoney);
         }
         Assert.hasText(this.title, "'title' must not be null, empty or blank");
+        Assert.notNull(paymentMethodType, "'paymentMethodType' must not be null");
+        Assert.notNull(this.expendedAt, "'this.expendedAt' must not be null");
     }
 }
