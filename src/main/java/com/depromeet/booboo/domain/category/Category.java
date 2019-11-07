@@ -21,12 +21,13 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Category {
-    private static final Set<String> DEFAULT_CATEGORY_NAMES = Stream.of(
-            "생활용품",
-            "육아용품",
-            "문화",
-            "건강"
-    ).collect(Collectors.toSet());
+    private static final Set<String> DEFAULT_CATEGORY_NAMES;
+
+    static {
+        DEFAULT_CATEGORY_NAMES = Stream.of(DefaultCategories.values())
+                .map(DefaultCategories::value)
+                .collect(Collectors.toSet());
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -79,5 +80,22 @@ public class Category {
         return DEFAULT_CATEGORY_NAMES.stream()
                 .map(name -> Category.create(member.getMemberId(), name, categoryRepository))
                 .collect(Collectors.toList());
+    }
+
+    public enum DefaultCategories {
+        SUPPLIES("생활용품"),
+        BABY_PRODUCTS("육아용품"),
+        CULTURE("문화"),
+        HEALTH("건강");
+
+        private final String value;
+
+        DefaultCategories(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return value;
+        }
     }
 }

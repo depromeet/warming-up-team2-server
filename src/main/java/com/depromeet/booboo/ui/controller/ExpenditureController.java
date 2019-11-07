@@ -45,10 +45,10 @@ public class ExpenditureController {
     @ApiOperation("지출 내역을 생성합니다")
     @PostMapping("/expenditures")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<ExpenditureResponse> createExpenditures(@ApiParam(name = "Authorization", value = "Bearer {accessToken}", required = true)
-                                                               @RequestHeader(name = "Authorization") String authorization,
-                                                               @ApiIgnore @RequestAttribute Long memberId,
-                                                               @RequestBody ExpenditureRequest expenditureRequest) {
+    public ApiResponse<ExpenditureResponse> createExpenditure(@ApiParam(name = "Authorization", value = "Bearer {accessToken}", required = true)
+                                                              @RequestHeader(name = "Authorization") String authorization,
+                                                              @ApiIgnore @RequestAttribute Long memberId,
+                                                              @RequestBody ExpenditureRequest expenditureRequest) {
         ExpenditureResponse expenditureResponse = expenditureService.createExpenditure(memberId, expenditureRequest);
         return ApiResponse.successFrom(expenditureResponse);
     }
@@ -72,11 +72,11 @@ public class ExpenditureController {
     @ApiOperation("지출 내역을 수정합니다")
     @PutMapping("/expenditures/{expenditureId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<ExpenditureResponse> createExpenditures(@ApiParam(name = "Authorization", value = "Bearer {accessToken}", required = true)
-                                                               @RequestHeader(name = "Authorization") String authorization,
-                                                               @ApiIgnore @RequestAttribute Long memberId,
-                                                               @PathVariable Long expenditureId,
-                                                               @RequestBody ExpenditureRequest expenditureRequest) {
+    public ApiResponse<ExpenditureResponse> updateExpenditure(@ApiParam(name = "Authorization", value = "Bearer {accessToken}", required = true)
+                                                              @RequestHeader(name = "Authorization") String authorization,
+                                                              @ApiIgnore @RequestAttribute Long memberId,
+                                                              @PathVariable Long expenditureId,
+                                                              @RequestBody ExpenditureRequest expenditureRequest) {
         ExpenditureResponse expenditureResponse = expenditureService.updateExpenditure(memberId, expenditureId, expenditureRequest);
         return ApiResponse.successFrom(expenditureResponse);
     }

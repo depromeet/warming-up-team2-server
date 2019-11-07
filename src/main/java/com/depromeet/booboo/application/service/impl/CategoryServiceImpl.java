@@ -5,10 +5,13 @@ import com.depromeet.booboo.application.exception.ResourceNotFoundException;
 import com.depromeet.booboo.application.service.CategoryService;
 import com.depromeet.booboo.domain.category.Category;
 import com.depromeet.booboo.domain.category.CategoryRepository;
+import com.depromeet.booboo.domain.expenditure.Expenditure;
+import com.depromeet.booboo.domain.expenditure.ExpenditureRepository;
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.domain.member.MemberRepository;
 import com.depromeet.booboo.ui.dto.CategoryRequest;
 import com.depromeet.booboo.ui.dto.CategoryResponse;
+import com.depromeet.booboo.ui.dto.MostExpendedCategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryAssembler categoryAssembler;
+    private final ExpenditureRepository expenditureRepository;
 
     @Override
     @Transactional
@@ -63,5 +67,23 @@ public class CategoryServiceImpl implements CategoryService {
                 pageable,
                 categoryPage.getTotalElements()
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MostExpendedCategoryResponse getCategoriesOrderByTotalExpenditure(Long memberId) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResourceNotFoundException("'member' not found. memberId:" + memberId));
+        List<Long> memberIds = member.getCoupleMembers()
+                .stream()
+                .map(Member::getMemberId)
+                .collect(Collectors.toList());
+
+        List<Category> categories = categoryRepository.findByMemberIdIn(memberIds);
+        List<Expenditure> expenditures = expenditureRepository.findByMemberIn(member.getCoupleMembers());
+
+        return categoryAssembler.toCategoryByExpenditureResponse(categories, expenditures);
     }
 }
