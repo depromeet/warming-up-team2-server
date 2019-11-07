@@ -13,6 +13,7 @@ public class ExpenditureResponse {
     private String title;
     private String description;
     private String imageUrl;
+    private String paymentMethod;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDateTime createdAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING)

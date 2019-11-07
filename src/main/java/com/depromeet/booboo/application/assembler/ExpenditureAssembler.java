@@ -24,6 +24,7 @@ public class ExpenditureAssembler {
         response.setTitle(expenditure.getTitle());
         response.setDescription(expenditure.getDescription());
         response.setImageUrl(expenditure.getImageUrl());
+        response.setPaymentMethod(expenditure.getPaymentMethodType().name());
         response.setCreatedAt(expenditure.getCreatedAt());
         response.setUpdatedAt(expenditure.getUpdatedAt());
         return response;
