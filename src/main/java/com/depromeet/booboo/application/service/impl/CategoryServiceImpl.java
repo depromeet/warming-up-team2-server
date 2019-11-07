@@ -36,12 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException("'member' not found. memberId:" + memberId));
-        List<Long> memberIds = member.getCoupleMembers()
-                .stream()
-                .map(Member::getMemberId)
-                .collect(Collectors.toList());
 
-        Category category = Category.create(memberId, memberIds, name, categoryRepository);
+        Category category = Category.create(member.getMemberId(), name, categoryRepository);
 
         return categoryAssembler.toCategoryResponse(category);
     }

@@ -5,6 +5,7 @@ import com.depromeet.booboo.api.MemberControllerApi;
 import com.depromeet.booboo.api.TestApiResult;
 import com.depromeet.booboo.application.adapter.kakao.KakaoAdapter;
 import com.depromeet.booboo.application.adapter.kakao.KakaoUserResponse;
+import com.depromeet.booboo.domain.category.CategoryRepository;
 import com.depromeet.booboo.ui.dto.LoginRequest;
 import com.depromeet.booboo.ui.dto.LoginResponse;
 import com.depromeet.booboo.ui.dto.MemberResponse;
@@ -49,6 +50,8 @@ public class LoginTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private LoginControllerApi loginControllerApi;
     private MemberControllerApi memberControllerApi;
@@ -82,6 +85,7 @@ public class LoginTest {
                 API_LOGIN_RESPONSE_TYPE_REFERENCE
         );
         assertThat(response.getData().getAccessToken()).isNotEmpty();
+        System.out.println(categoryRepository.findAll());
     }
 
     @Test
