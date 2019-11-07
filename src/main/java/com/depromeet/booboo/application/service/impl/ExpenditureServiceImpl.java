@@ -46,7 +46,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
 
-        List<Member> members = member.getCoupleMembers(memberRepository);
+        List<Member> members = member.getCoupleMembers();
 
 
         String categoryName = expenditureQueryRequest.getCategory();
@@ -81,7 +81,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
 
-        List<Long> memberIds = member.getCoupleMembers(memberRepository)
+        List<Long> memberIds = member.getCoupleMembers()
                 .stream()
                 .map(Member::getMemberId)
                 .collect(Collectors.toList());
@@ -109,7 +109,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         Expenditure expenditure = expenditureRepository.findByMemberAndExpenditureId(member, expenditureId)
                 .orElseThrow(() -> new ExpenditureException("expenditure not found. memberId:" + memberId + ", expenditureId:" + expenditureId));
 
-        List<Long> memberIds = member.getCoupleMembers(memberRepository)
+        List<Long> memberIds = member.getCoupleMembers()
                 .stream()
                 .map(Member::getMemberId)
                 .collect(Collectors.toList());

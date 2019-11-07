@@ -9,4 +9,5 @@ public class MemberResponse {
     private String profileImageUrl;
     private String status;
     private String connectionCode;
+    private String spouseName;
 }

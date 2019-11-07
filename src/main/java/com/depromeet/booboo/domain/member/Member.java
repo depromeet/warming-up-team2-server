@@ -49,6 +49,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
     @ManyToOne
+    @JoinColumn(name = "coupleId")
     private Couple couple;
     @CreatedDate
     private LocalDateTime createdAt;
@@ -83,15 +84,17 @@ public class Member {
         return coupleRepository.save(couple);
     }
 
-    public boolean isCouple() {
-        return this.status.isCouple();
-    }
-
-    public List<Member> getCoupleMembers(MemberRepository memberRepository) {
-        Assert.notNull(memberRepository, "'memberRepository' must not be null");
+    public List<Member> getCoupleMembers() {
         if (couple == null || !status.isCouple()) {
             return Collections.singletonList(this);
         }
-        return memberRepository.findByCouple(this.couple);
+        return couple.getMembers();
+    }
+
+    public String getSpouseName() {
+        if (couple == null) {
+            return null;
+        }
+        return couple.getSpouseName(this);
     }
 }

@@ -16,6 +16,7 @@ public class MemberAssembler {
         response.setStatus(member.getStatus().name());
         response.setProfileImageUrl(member.getProfileImg());
         response.setConnectionCode(member.getConnectionCode());
+        response.setSpouseName(member.getSpouseName());
         return response;
     }
 }
