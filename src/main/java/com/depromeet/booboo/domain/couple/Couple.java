@@ -35,7 +35,7 @@ public class Couple {
     public String getSpouseName(Member member) {
         Assert.notNull(member, "'member' must not be null");
         return members.stream()
-                .filter(it -> it.equals(member))
+                .filter(it -> !it.equals(member))
                 .map(Member::getName)
                 .findFirst()
                 .orElse(null);
