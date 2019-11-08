@@ -11,10 +11,7 @@ import com.depromeet.booboo.domain.expenditure.ExpenditureRepository;
 import com.depromeet.booboo.domain.expenditure.ExpenditureValue;
 import com.depromeet.booboo.domain.member.Member;
 import com.depromeet.booboo.domain.member.MemberRepository;
-import com.depromeet.booboo.ui.dto.ExpenditureQueryRequest;
-import com.depromeet.booboo.ui.dto.ExpenditureRequest;
-import com.depromeet.booboo.ui.dto.ExpenditureResponse;
-import com.depromeet.booboo.ui.dto.MonthlyTotalExpenditureResponse;
+import com.depromeet.booboo.ui.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,6 +24,7 @@ import org.springframework.util.Assert;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -148,5 +146,17 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         LocalDate fromExpendedAt = LocalDate.now().withDayOfMonth(1).minusMonths(5L);
         List<Expenditure> expenditures = expenditureRepository.findByMemberInAndExpendedAtGreaterThanEqual(member.getCoupleMembers(), fromExpendedAt);
         return expenditureAssembler.toMonthlyTotalExpenditureResponse(expenditures);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, MonthlyExpenditureResponse> getTotalExpendituresDaily(Long memberId) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
+
+        List<Expenditure> expenditures = expenditureRepository.findByMemberIn(member.getCoupleMembers());
+        return expenditureAssembler.toMonthlyExpenditureMap(expenditures);
     }
 }
