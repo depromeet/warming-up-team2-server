@@ -43,7 +43,8 @@ public class CategoryAssembler {
                         it -> expenditures.stream()
                                 .filter(expenditure -> it.equals(expenditure.getCategory()))
                                 .map(Expenditure::getAmountOfMoney)
-                                .reduce(0L, Long::sum)
+                                .reduce(0L, Long::sum),
+                        Long::sum
                 ));
 
         Map<String, Long> sortedMap = MapUtils.sortByValue(map, Map.Entry.comparingByValue(Comparator.reverseOrder()));
