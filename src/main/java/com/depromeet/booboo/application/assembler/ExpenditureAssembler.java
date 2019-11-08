@@ -51,6 +51,13 @@ public class ExpenditureAssembler {
                         Long::sum,
                         TreeMap::new)
                 );
+
+        // 기본값 추가
+        LocalDate localDate = LocalDate.now();
+        for (long i = 0L; i < 6L; i++) {
+            map.putIfAbsent(localDate.minusMonths(i).format(DateTimeFormatter.ofPattern("yyyy-MM")), 0L);
+        }
+
         MonthlyTotalExpenditureResponse response = new MonthlyTotalExpenditureResponse();
         response.setMonthlyTotalExpenditures(map);
         return response;

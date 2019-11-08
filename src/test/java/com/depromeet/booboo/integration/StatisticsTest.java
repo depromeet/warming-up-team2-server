@@ -64,9 +64,6 @@ public class StatisticsTest {
         this.createExpenditure(4000L,
                 Category.DefaultCategories.BABY_PRODUCTS.value(),
                 LocalDate.of(2019, 9, 1));
-        this.createExpenditure(5000L,
-                Category.DefaultCategories.CULTURE.value(),
-                LocalDate.of(2019, 10, 1));
         this.createExpenditure(6000L,
                 Category.DefaultCategories.HEALTH.value(),
                 LocalDate.of(2019, 11, 1));
