@@ -39,7 +39,7 @@ public class AwsS3Adapter implements StorageAdapter {
             s3Client.putObject(bucket.getName(), filename, inputStream, metadata);
             return "https://s3.ap-northeast-2.amazonaws.com/" + bucketName + "/" + filename;
         } catch (Exception e) {
-            throw new StorageException("Failed to save object. filename:" + filename + ", mediaType:" + mediaType);
+            throw new StorageException("Failed to save object. filename:" + filename + ", mediaType:" + mediaType, e);
         }
     }
 
