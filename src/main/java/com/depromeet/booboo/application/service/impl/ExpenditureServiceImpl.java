@@ -27,6 +27,7 @@ import org.springframework.util.Assert;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,7 +65,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
             if (category == null) {
                 expenditurePage = expenditureRepository.findByMemberIn(members, pageable);
             } else {
-                expenditurePage = expenditureRepository.findByMemberInAndCategoryId(members, category.getCategoryId(), pageable);
+                expenditurePage = expenditureRepository.findByMemberInAndCategory(members, category, pageable);
             }
         }
 
@@ -87,13 +88,13 @@ public class ExpenditureServiceImpl implements ExpenditureService {
                 .stream()
                 .map(Member::getMemberId)
                 .collect(Collectors.toList());
-        String categoryName = expenditureRequest.getCategory();
-        Category category = Category.getOrCreate(memberId, memberIds, categoryName, categoryRepository);
+        String categoryName = Optional.ofNullable(expenditureRequest.getCategory())
+                .orElse(Category.DefaultCategories.UNKNOWN.value());
 
         Expenditure expenditure = Expenditure.create(
                 member,
                 expenditureAssembler.toExpenditureValue(expenditureRequest),
-                category
+                Category.getOrCreate(memberId, memberIds, categoryName, categoryRepository)
         );
         expenditureRepository.save(expenditure);
         return expenditureAssembler.toExpenditureResponse(expenditure);
@@ -145,7 +146,6 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpenditureException("member not found. memberId:" + memberId));
         LocalDate fromExpendedAt = LocalDate.now().withDayOfMonth(1).minusMonths(5L);
-        //
         List<Expenditure> expenditures = expenditureRepository.findByMemberInAndExpendedAtGreaterThanEqual(member.getCoupleMembers(), fromExpendedAt);
         return expenditureAssembler.toMonthlyTotalExpenditureResponse(expenditures);
     }

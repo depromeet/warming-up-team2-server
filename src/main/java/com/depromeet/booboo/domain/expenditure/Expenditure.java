@@ -27,7 +27,8 @@ public class Expenditure {
     private Long expenditureId;
     @ManyToOne
     private Member member;
-    private Long categoryId;
+    @ManyToOne
+    private Category category;
     private Long amountOfMoney;
     private String title;
     private String description;
@@ -58,7 +59,7 @@ public class Expenditure {
             expenditure.expendedAt = expendedAt;
         }
         if (category != null) {
-            expenditure.categoryId = category.getCategoryId();
+            expenditure.category = category;
         }
         expenditure.validate();
         return expenditure;
@@ -81,7 +82,7 @@ public class Expenditure {
         }
         String categoryName = expenditureValue.getCategory();
         if (!StringUtils.isEmpty(categoryName)) {
-            this.categoryId = Category.getOrCreate(memberId, memberIds, categoryName, categoryRepository).getCategoryId();
+            this.category = Category.getOrCreate(memberId, memberIds, categoryName, categoryRepository);
         }
         this.paymentMethodType = PaymentMethodType.from(expenditureValue.getPaymentMethod());
         LocalDate expendedAt = expenditureValue.getExpendedAt();

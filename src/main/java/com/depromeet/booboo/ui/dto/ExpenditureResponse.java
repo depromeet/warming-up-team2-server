@@ -15,6 +15,7 @@ public class ExpenditureResponse {
     private String description;
     private String imageUrl;
     private String paymentMethod;
+    private String category;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDate expendedAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING)

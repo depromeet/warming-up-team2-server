@@ -86,7 +86,8 @@ public class Category {
         SUPPLIES("생활용품"),
         BABY_PRODUCTS("육아용품"),
         CULTURE("문화"),
-        HEALTH("건강");
+        HEALTH("건강"),
+        UNKNOWN("미등록");
 
         private final String value;
 
