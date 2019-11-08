@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:aws.yml")
+@PropertySource("classpath:/aws.properties")
 public class AwsConfig {
     @Value("${aws.access-key:defaultAwsAccessKey}")
     private String awsAccessKey;
