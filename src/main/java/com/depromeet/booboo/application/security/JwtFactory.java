@@ -7,7 +7,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.depromeet.booboo.domain.member.Member;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -18,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-@RequiredArgsConstructor
 public class JwtFactory {
     private static final Pattern PATTERN_AUTHORIZATION_HEADER = Pattern.compile("[Bb]earer (.+)");
     private static final String CLAIM_NAME_MEMBER_ID = "id";
@@ -27,6 +25,11 @@ public class JwtFactory {
     private final String tokenSigningKey;
     private Algorithm algorithm;
     private JWTVerifier jwtVerifier;
+
+    public JwtFactory(String tokenIssuer, String tokenSigningKey) {
+        this.tokenIssuer = tokenIssuer;
+        this.tokenSigningKey = tokenSigningKey;
+    }
 
     @PostConstruct
     public void init() {

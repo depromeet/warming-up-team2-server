@@ -41,7 +41,7 @@ public class CategoryAssembler {
                 .collect(Collectors.toMap(
                         Category::getName,
                         it -> expenditures.stream()
-                                .filter(expenditure -> it.getCategoryId().equals(expenditure.getCategoryId()))
+                                .filter(expenditure -> it.equals(expenditure.getCategory()))
                                 .map(Expenditure::getAmountOfMoney)
                                 .reduce(0L, Long::sum)
                 ));
