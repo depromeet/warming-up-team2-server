@@ -49,7 +49,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
     @ManyToOne
-    @JoinColumn(name = "coupleId")
+    @JoinColumn(name = "couple_id")
     private Couple couple;
     @CreatedDate
     private LocalDateTime createdAt;

@@ -26,8 +26,10 @@ public class Expenditure {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long expenditureId;
     @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
     private Long amountOfMoney;
     private String title;
