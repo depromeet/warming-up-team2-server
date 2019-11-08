@@ -64,7 +64,7 @@ public class Category {
         Assert.hasText(name, "'name' must not be null, empty or blank");
         Assert.notNull(categoryRepository, "'categoryRepository' must not be null");
 
-        return categoryRepository.findByNameAndMemberIdIn(name, memberIds)
+        return categoryRepository.findByNameAndMemberId(name, memberId)
                 .orElseGet(() -> {
                     Category category = new Category();
                     category.memberId = memberId;
