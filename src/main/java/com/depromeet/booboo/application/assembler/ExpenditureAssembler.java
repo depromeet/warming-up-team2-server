@@ -1,5 +1,6 @@
 package com.depromeet.booboo.application.assembler;
 
+import com.depromeet.booboo.domain.category.Category;
 import com.depromeet.booboo.domain.expenditure.Expenditure;
 import com.depromeet.booboo.domain.expenditure.ExpenditureValue;
 import com.depromeet.booboo.ui.dto.ExpenditureRequest;
@@ -12,6 +13,7 @@ import org.springframework.util.Assert;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -32,7 +34,9 @@ public class ExpenditureAssembler {
         response.setDescription(expenditure.getDescription());
         response.setImageUrl(expenditure.getImageUrl());
         response.setPaymentMethod(expenditure.getPaymentMethodType().name());
-        response.setCategory(expenditure.getCategory().getName());
+        response.setCategory(Optional.ofNullable(expenditure.getCategory())
+                .map(Category::getName)
+                .orElse(Category.DefaultCategories.UNKNOWN.name()));
         response.setExpendedAt(expenditure.getExpendedAt());
         response.setCreatedAt(expenditure.getCreatedAt());
         response.setUpdatedAt(expenditure.getUpdatedAt());
