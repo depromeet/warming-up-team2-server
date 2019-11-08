@@ -21,7 +21,7 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Expenditure {
+public class Expenditure implements Comparable<Expenditure> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long expenditureId;
@@ -113,5 +113,10 @@ public class Expenditure {
         Assert.hasText(this.title, "'title' must not be null, empty or blank");
         Assert.notNull(paymentMethodType, "'paymentMethodType' must not be null");
         Assert.notNull(this.expendedAt, "'this.expendedAt' must not be null");
+    }
+
+    @Override
+    public int compareTo(Expenditure o) {
+        return this.expendedAt.compareTo(o.expendedAt);
     }
 }

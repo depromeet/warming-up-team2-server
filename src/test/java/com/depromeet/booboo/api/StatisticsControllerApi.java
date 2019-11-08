@@ -1,5 +1,6 @@
 package com.depromeet.booboo.api;
 
+import com.depromeet.booboo.ui.dto.MonthlyExpenditureResponse;
 import com.depromeet.booboo.ui.dto.MonthlyTotalExpenditureResponse;
 import com.depromeet.booboo.ui.dto.MostExpendedCategoryResponse;
 import com.depromeet.booboo.ui.dto.common.ApiResponse;
@@ -8,10 +9,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Map;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 public class StatisticsControllerApi {
     private static final TypeReference<ApiResponse<MonthlyTotalExpenditureResponse>> MONTHLY_TOTAL_EXPENDITURE_RESPONSE_TYPE_REFERENCE = new TypeReference<ApiResponse<MonthlyTotalExpenditureResponse>>() {
+    };
+    private static final TypeReference<ApiResponse<Map<String, MonthlyExpenditureResponse>>> MONTHLY_EXPENDITURE_RESPONSE_TYPE_REFERENCE = new TypeReference<ApiResponse<Map<String, MonthlyExpenditureResponse>>>() {
     };
     private static final TypeReference<ApiResponse<MostExpendedCategoryResponse>> MOST_EXPENDED_CATEGORY_RESPONSE_TYPE_REFERENCE = new TypeReference<ApiResponse<MostExpendedCategoryResponse>>() {
     };
@@ -31,6 +36,16 @@ public class StatisticsControllerApi {
         return new TestApiResult<>(
                 mvcResult,
                 objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), MONTHLY_TOTAL_EXPENDITURE_RESPONSE_TYPE_REFERENCE)
+        );
+    }
+
+    public TestApiResult<Map<String, MonthlyExpenditureResponse>> getExpendituresDaily(String accessToken) throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/expenditures?format=graph&type=daily")
+                .header("Authorization", "Bearer " + accessToken))
+                .andReturn();
+        return new TestApiResult<>(
+                mvcResult,
+                objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), MONTHLY_EXPENDITURE_RESPONSE_TYPE_REFERENCE)
         );
     }
 
